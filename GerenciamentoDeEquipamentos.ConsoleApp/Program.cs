@@ -14,7 +14,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             string[] numeroSerieEquipamento = new string[100];
             string[] dataFabricacaoEquipamento = new string[100];
             string[] fabricanteEquipamento = new string[100];
-            int totalDeEquipamentos = 0;
+            int totalDeEquipamentosCont = 0;
             int totalDeEquipamentosAtual = 0;
 
             while (fecharApp == false)
@@ -41,8 +41,8 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                         if (opcaoEscolhidaMenus == "1")
                         {
                             opcaoValida = true;
-                            totalDeEquipamentos = RegistrarEquipamento(nomeEquipamento, precoEquipamento, numeroSerieEquipamento, dataFabricacaoEquipamento, fabricanteEquipamento, totalDeEquipamentos);
-                            totalDeEquipamentosAtual = totalDeEquipamentosAtual + totalDeEquipamentos;
+                            totalDeEquipamentosCont = RegistrarEquipamento(nomeEquipamento, precoEquipamento, numeroSerieEquipamento, dataFabricacaoEquipamento, fabricanteEquipamento, totalDeEquipamentosAtual);
+                            totalDeEquipamentosAtual = totalDeEquipamentosAtual + totalDeEquipamentosCont;
                             primeiraVez = false;
                             Console.Clear();
                         }
@@ -356,6 +356,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                         Console.WriteLine("");
                         Console.Write("Aperte ENTER para realizar o registro do equipamento novamente.");
                         Console.ReadLine();
+                        contadorTotal--;
                         i--;
                     }
                     else
@@ -392,8 +393,9 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             Console.WriteLine("===== Inventario de Equipamentos =====");
             Console.WriteLine("");
             Console.WriteLine("Total de itens: " + totalDeEquipamentos);
+            Console.WriteLine("");
 
-            if(totalDeEquipamentos == 0)
+            if (totalDeEquipamentos == 0)
             {
                 Console.WriteLine("");
                 Console.WriteLine("Nao existem equipamentos cadastrados.");
