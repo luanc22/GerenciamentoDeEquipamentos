@@ -339,6 +339,20 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 Console.Write("Digite o nome do equipamento: ");
                 nomeEquipamento[contadorTotal] = Console.ReadLine();
 
+                if (nomeEquipamento[contadorTotal].Length <= 6)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Nome do equipamento deve conter no minimo 6 caracteres!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                    i--;
+                    continue;
+                }
+
                 Console.WriteLine("");
 
                 Console.Write("Digite o preco do equipamento: ");
