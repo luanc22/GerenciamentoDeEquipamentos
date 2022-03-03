@@ -437,7 +437,6 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
 
             if (totalDeEquipamentos == 0)
             {
-                Console.WriteLine("");
                 Console.WriteLine("Nao existem equipamentos cadastrados.");
                 Console.WriteLine("");
                 Console.Write("Aperte ENTER para prosseguir.");
@@ -455,6 +454,9 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 Console.WriteLine("");
                 Console.WriteLine("Fabricante do Equipamento: " + fabricanteEquipamento[i]);
                 Console.WriteLine("");
+
+                Console.WriteLine("");
+
             }
 
             Console.ReadLine();
@@ -761,7 +763,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
         }
         #endregion
 
-        #region Metodos Chamados. [WIP]
+        #region Metodos Chamados. [OK]
 
         static string[] RetornarTitulo(string[] tituloChamado)
         {
@@ -976,6 +978,8 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 Console.WriteLine("Equipamento: " + nomeDoEquipamento);
                 Console.WriteLine("");
                 Console.WriteLine("Numero de dias do chamado em aberto: " + diferencaDeDatas[i]);
+                Console.WriteLine("");
+
                 Console.WriteLine("");
             }
 
