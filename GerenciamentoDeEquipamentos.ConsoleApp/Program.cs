@@ -388,6 +388,13 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
 
                     if (confirmarRegistro == "SIM")
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("");
+                        Console.WriteLine("Equipamento adicionado com sucesso!");
+                        Console.WriteLine("");
+                        Console.ResetColor();
+                        Console.Write("Aperte ENTER para prosseguir.");
+                        Console.ReadLine();
                         break;
                     }
                     else if (confirmarRegistro == "NAO")
@@ -444,32 +451,43 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 return;
             }
 
+            Console.WriteLine("=============== Equipamentos ===============");
+            Console.WriteLine("");
+            Console.WriteLine("{0, -10} | {1, -55} | {2, -35}", "ID", "Nome do Equipamento", "Fabricante");
+            Console.WriteLine("---------------------------------------------------------------------------------------------------------------");
+
             for (int i = 0; i < totalDeEquipamentos; i++)
             {
-                Console.WriteLine("=============== Equipamento {0} ===============", i + 1);
+                Console.Write("{0, -10} | {1, -55} | {2, -35}", i+1, nomeEquipamento[i], fabricanteEquipamento[i]);
                 Console.WriteLine("");
-                Console.WriteLine("Nome do Equipamento: " + nomeEquipamento[i]);
-                Console.WriteLine("");
-                Console.WriteLine("Numero de Serie do Equipamento: " + numeroSerieEquipamento[i]);
-                Console.WriteLine("");
-                Console.WriteLine("Fabricante do Equipamento: " + fabricanteEquipamento[i]);
-                Console.WriteLine("");
-
-                Console.WriteLine("");
-
             }
-
+            Console.WriteLine("");
+            Console.Write("Aperte ENTER para prosseguir.");
             Console.ReadLine();
         }
 
         static void EditarInventario(string[] nomeEquipamento, double[] precoEquipamento, string[] numeroSerieEquipamento, string[] dataFabricacaoEquipamento, string[] fabricanteEquipamento, int totalDeEquipamentos)
         {
+            if (totalDeEquipamentos == 0)
+            {
+                Console.WriteLine("");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ERRO!");
+                Console.WriteLine("Nao existem equipamentos registrados, registre pelo menos um equipamento!");
+                Console.ResetColor();
+                Console.WriteLine("");
+                Console.WriteLine("Aperte ENTER para prosseguir.");
+                Console.ReadLine();
+                return;
+            }
+
             bool opcaoValida = false;
             int equipamentoAEditar = 0;
             while (opcaoValida == false)
             {
-                Console.Clear();
-                Cabecalho();
+                MostrarInventario(nomeEquipamento, precoEquipamento, numeroSerieEquipamento, dataFabricacaoEquipamento, fabricanteEquipamento, totalDeEquipamentos);
+
+                Console.WriteLine("");
                 Console.WriteLine("Qual equipamento deseja editar?");
                 Console.Write("Numero do equipamento: ");
                 string inputEquipamento = Console.ReadLine();
@@ -487,18 +505,6 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                     Console.WriteLine("");
                     Console.WriteLine("Aperte ENTER para prosseguir.");
                     Console.ReadLine();
-                }
-                else if (totalDeEquipamentos == 0)
-                {
-                    Console.WriteLine("");
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("ERRO!");
-                    Console.WriteLine("Nao existem equipamentos registrados, registre pelo menos um equipamento!");
-                    Console.ResetColor();
-                    Console.WriteLine("");
-                    Console.WriteLine("Aperte ENTER para prosseguir.");
-                    Console.ReadLine();
-                    return;
                 }
                 else
                 {
@@ -526,9 +532,11 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 }
             }
 
+            Console.Clear();
+            Cabecalho();
+
             equipamentoAEditar = equipamentoAEditar - 1;
 
-            Console.WriteLine("");
             Console.WriteLine("===== Equipamento {0} =====", equipamentoAEditar + 1);
             Console.WriteLine("");
             Console.WriteLine("Nome do Equipamento: " + nomeEquipamento[equipamentoAEditar]);
@@ -542,7 +550,6 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             Console.WriteLine("Fabricante do Equipamento: " + fabricanteEquipamento[equipamentoAEditar]);
             Console.WriteLine("");
 
-            Console.WriteLine("");
             Console.WriteLine("O que deseja editar?");
             Console.WriteLine("[1] - Nome.");
             Console.WriteLine("[2] - Preco.");
@@ -587,7 +594,17 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                     break;
             }
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("");
+            Console.WriteLine("Equipamento editado com sucesso!");
+            Console.WriteLine("");
+            Console.ResetColor();
+            Console.Write("Aperte ENTER para prosseguir.");
+            Console.ReadLine();
+
+            Console.Clear();
+            Cabecalho();
+
             Console.WriteLine("===== Equipamento {0} apos edicao =====", equipamentoAEditar + 1);
             Console.WriteLine("");
             Console.WriteLine("Nome do Equipamento: " + nomeEquipamento[equipamentoAEditar]);
@@ -615,8 +632,22 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             string[] novaArrayFabricante = new string[1000];
             while (opcaoValida == false)
             {
-                Console.Clear();
-                Cabecalho();
+                MostrarInventario(nomeEquipamento, precoEquipamento, numeroSerieEquipamento, dataFabricacaoEquipamento, fabricanteEquipamento, totalDeEquipamentos);
+
+                if (totalDeEquipamentos == 0)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Nao existem equipamentos registrados, registre pelo menos um equipamento!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                    return totalDeEquipamentos + 1;
+                }
+
+                Console.WriteLine("");
                 Console.WriteLine("Qual equipamento deseja excluir?");
                 Console.Write("Numero do equipamento: ");
                 string inputEquipamento = Console.ReadLine();
@@ -634,18 +665,6 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                     Console.WriteLine("");
                     Console.WriteLine("Aperte ENTER para prosseguir.");
                     Console.ReadLine();
-                }
-                else if (totalDeEquipamentos == 0)
-                {
-                    Console.WriteLine("");
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("ERRO!");
-                    Console.WriteLine("Nao existem equipamentos registrados, registre pelo menos um equipamento!");
-                    Console.ResetColor();
-                    Console.WriteLine("");
-                    Console.WriteLine("Aperte ENTER para prosseguir.");
-                    Console.ReadLine();
-                    return totalDeEquipamentos + 1;
                 }
                 else
                 {
@@ -673,9 +692,11 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 }
             }
 
+            Console.Clear();
+            Cabecalho();
+
             equipamentoAExcluir = equipamentoAExcluir - 1;
 
-            Console.WriteLine("");
             Console.WriteLine("===== Equipamento {0} =====", equipamentoAExcluir + 1);
             Console.WriteLine("");
             Console.WriteLine("Nome do Equipamento: " + nomeEquipamento[equipamentoAExcluir]);
@@ -749,6 +770,13 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 }
 
                 totalDeEquipamentos = totalDeEquipamentos - 1;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("");
+                Console.WriteLine("Equipamento excluido com sucesso!");
+                Console.WriteLine("");
+                Console.ResetColor();
+                Console.Write("Aperte ENTER para prosseguir.");
+                Console.ReadLine();
             }
             else
             {
