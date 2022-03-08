@@ -9,19 +9,29 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             bool fecharApp = false;
             bool primeiraVez = true;
             string nomeLogin = "";
+
             string[] nomeEquipamento = new string[1000];
-            double[] precoEquipamento = new double[1000];
             string[] numeroSerieEquipamento = new string[1000];
             string[] dataFabricacaoEquipamento = new string[1000];
             string[] fabricanteEquipamento = new string[1000];
             string[] tituloChamado = new string[1000];
             string[] descricaoChamado = new string[1000];
             string[] dataAberturaChamado = new string[1000];
+            string[] nomeSolicitante = new string[1000];
+            string[] emailSolicitante = new string[1000];
+            string[] telefoneSolicitante = new string[1000];
+
+
+            double[] precoEquipamento = new double[1000];
             int[] numeroEquipamentoChamado = new int[1000];
+
+
             int totalDeEquipamentosCont = 0;
             int totalDeEquipamentosAtual = 0;
             int totalDeChamadosCont = 0;
             int totalDeChamadosAtual = 0;
+            int totalDeSolicitantesCont = 0;
+            int totalDeSolicitantesAtual = 0;
 
             while (fecharApp == false)
             {
@@ -148,6 +158,61 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                         }
                     }
                 }
+                else if (opcaoEscolhida == "3")
+                {
+                    opcaoEscolhidaMenus = MenuControleDeSolicitantes(opcaoEscolhidaMenus);
+
+                    while (opcaoValida == false)
+                    {
+                        if (opcaoEscolhidaMenus == "1")
+                        {
+                            opcaoValida = true;
+                            totalDeSolicitantesCont = RegistrarSolicitantes(nomeSolicitante, emailSolicitante, telefoneSolicitante, totalDeSolicitantesAtual);
+                            totalDeSolicitantesAtual = totalDeSolicitantesAtual + totalDeSolicitantesCont;
+                            primeiraVez = false;
+                            Console.Clear();
+                        }
+                        else if (opcaoEscolhidaMenus == "2")
+                        {
+                            opcaoValida = true;
+                            MostrarSolicitantes(nomeSolicitante, emailSolicitante, telefoneSolicitante, totalDeSolicitantesAtual);
+                            primeiraVez = false;
+                            Console.Clear();
+                        }
+                        else if (opcaoEscolhidaMenus == "3")
+                        {
+                            opcaoValida = true;
+                            EditarSolicitantes(nomeSolicitante, emailSolicitante, telefoneSolicitante, totalDeSolicitantesAtual);
+                            primeiraVez = false;
+                            Console.Clear();
+                        }
+                        else if (opcaoEscolhidaMenus == "4")
+                        {
+                            opcaoValida = true;
+                            totalDeChamadosCont = ExcluirChamados(tituloChamado, descricaoChamado, dataAberturaChamado, numeroEquipamentoChamado, totalDeChamadosAtual);
+                            totalDeChamadosAtual = totalDeChamadosAtual - totalDeChamadosCont;
+                            primeiraVez = false;
+                            Console.Clear();
+                        }
+                        else if (opcaoEscolhidaMenus == "5")
+                        {
+                            opcaoValida = true;
+                            primeiraVez = false;
+                            Console.Clear();
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Opcao invalida! Por favor, tente novamente com uma opcao valida!");
+                            Console.ResetColor();
+                            Console.WriteLine("");
+                            Console.WriteLine("Aperte ENTER para prosseguir.");
+                            Console.ReadLine();
+                        }
+                    }
+                }
             }
         }
 
@@ -177,6 +242,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 Console.WriteLine("");
                 Console.WriteLine("[1] - Controle de Equipamentos.");
                 Console.WriteLine("[2] - Controle de Chamados.");
+                Console.WriteLine("[3] - Controle de Solicitantes.");
                 Console.WriteLine("");
                 Console.Write("Opcao escolhida: ");
                 opcaoEscolhida = Console.ReadLine();
@@ -187,6 +253,10 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                     opcaoValida = true;
                 }
                 else if (opcaoEscolhida == "2")
+                {
+                    opcaoValida = true;
+                }
+                else if (opcaoEscolhida == "3")
                 {
                     opcaoValida = true;
                 }
@@ -239,6 +309,23 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
 
             return opcaoEscolhidaMenus;
 
+        }
+
+        static string MenuControleDeSolicitantes(string opcaoEscolhidaMenus)
+        {
+            Console.Clear();
+            Cabecalho();
+            Console.WriteLine("[1] - Registrar solicitante.");
+            Console.WriteLine("[2] - Mostrar solicitante.");
+            Console.WriteLine("[3] - Editar solicitante.");
+            Console.WriteLine("[4] - Excluir solicitante.");
+            Console.WriteLine("[5] - Voltar ao menu.");
+            Console.WriteLine("");
+            Console.Write("Opcao escolhida: ");
+            opcaoEscolhidaMenus = Console.ReadLine();
+            opcaoEscolhidaMenus = opcaoEscolhidaMenus.Replace(" ", "");
+
+            return opcaoEscolhidaMenus;
         }
 
         static void Creditos()
@@ -458,7 +545,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
 
             for (int i = 0; i < totalDeEquipamentos; i++)
             {
-                Console.Write("{0, -10} | {1, -55} | {2, -35}", i+1, nomeEquipamento[i], fabricanteEquipamento[i]);
+                Console.Write("{0, -10} | {1, -55} | {2, -35}", i + 1, nomeEquipamento[i], fabricanteEquipamento[i]);
                 Console.WriteLine("");
             }
             Console.WriteLine("");
@@ -715,10 +802,10 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             string confirmacaoExclusao = Console.ReadLine();
             confirmacaoExclusao = confirmacaoExclusao.ToUpper();
             int j = 0;
-            
-            for(int i = 0; i < numeroEquipamentoChamado.Length; i++)
+
+            for (int i = 0; i < numeroEquipamentoChamado.Length; i++)
             {
-                if(numeroEquipamentoChamado[i] == equipamentoAExcluir + 1)
+                if (numeroEquipamentoChamado[i] == equipamentoAExcluir + 1)
                 {
                     Console.WriteLine("");
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -970,7 +1057,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             string nomeDoEquipamento;
             string dataSimples;
             int[] diferencaDeDatas = new int[1000];
-            
+
             for (int i = 0; i < totalDeChamados; i++)
             {
                 dataSimples = dataAberturaChamado[i];
@@ -1013,7 +1100,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
 
             Console.ReadLine();
         }
-       
+
         static void EditarChamados(string[] tituloChamado, string[] descricaoChamado, string[] dataAberturaChamado, int[] numeroEquipamentoChamado, int totalDeChamados)
         {
             bool opcaoValida = false;
@@ -1120,7 +1207,7 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
                 case 3:
                     Console.WriteLine("Digite o novo equipamento para atrelar ao chamado.");
                     Console.Write("Editar: ");
-                    string novoEquipamento= Console.ReadLine();
+                    string novoEquipamento = Console.ReadLine();
                     numeroEquipamentoChamado[chamadoAEditar] = int.Parse(novoEquipamento);
                     break;
                 case 4:
@@ -1282,6 +1369,479 @@ namespace GerenciamentoDeEquipamentos.ConsoleApp
             return totalDeChamados;
         }
         #endregion
+
+        #region Metodos Solicitantes. [OK]
+
+        static string[] RetornarNomeSolicitante(string[] nomeSolicitante)
+        {
+            return nomeSolicitante;
+        }
+
+        static string[] RetornarEmailSolicitante(string[] emailSolicitante)
+        {
+            return emailSolicitante;
+        }
+
+        static string[] RetornarTelefoneSolicitante(string[] telefoneSolicitante)
+        {
+            return telefoneSolicitante;
+        }
+
+        static int RegistrarSolicitantes(string[] nomeSolicitante, string[] emailSolicitante, string[] telefoneSolicitante, int totalDeSolicitantes)
+        {
+            Console.Clear();
+            Cabecalho();
+
+            string solicitantesParaRegistrar = "0";
+            bool numeroValido;
+            int i = 0;
+
+            bool verificarNumerosARegistrar = false;
+            while (verificarNumerosARegistrar == false)
+            {
+                Console.Write("Quantos solicitantes deseja registrar: ");
+                solicitantesParaRegistrar = Console.ReadLine();
+                numeroValido = int.TryParse(solicitantesParaRegistrar, out _);
+
+
+                if (numeroValido == false)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Digito invalido! Por favor, digite um numero!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    verificarNumerosARegistrar = true;
+                }
+            }
+
+            int solicitantesRegistrar = int.Parse(solicitantesParaRegistrar);
+
+            Console.WriteLine("");
+
+            int contadorTotal = 0;
+
+            if (totalDeSolicitantes == 0)
+            {
+                contadorTotal = 0;
+            }
+            else
+            {
+                contadorTotal = totalDeSolicitantes;
+            }
+            int contador = 0;
+
+            string confirmarRegistro;
+            bool opcaoValida;
+            for (i = 0; i < solicitantesRegistrar; i++)
+            {
+                Console.Clear();
+                Cabecalho();
+
+                opcaoValida = false;
+                Console.WriteLine("===== Registro do Solicitante {0} =====", contadorTotal + 1);
+                Console.WriteLine("");
+
+                Console.Write("Digite o nome do solicitante: ");
+                nomeSolicitante[contadorTotal] = Console.ReadLine();
+
+                if (nomeSolicitante[contadorTotal].Length <= 3)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Nome do solicitante deve conter no minimo 3 caracteres!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                    i--;
+                    continue;
+                }
+
+                Console.WriteLine("");
+
+                Console.Write("Digite o numero de telefone do solicitante: ");
+                telefoneSolicitante[contadorTotal] = Console.ReadLine();
+
+                Console.WriteLine("");
+
+                Console.Write("Digite o email do solicitante: ");
+                emailSolicitante[contadorTotal] = Console.ReadLine();
+
+                Console.WriteLine("");
+
+                Console.WriteLine("");
+                Console.WriteLine("Voce confirmar as informacoes digitadas? Digite 'Sim' ou 'Nao'.");
+                Console.Write("Opcao escolhida: ");
+                confirmarRegistro = Console.ReadLine();
+                confirmarRegistro = confirmarRegistro.ToUpper();
+                contador++;
+                contadorTotal++;
+
+                while (opcaoValida == false)
+                {
+
+
+                    if (confirmarRegistro == "SIM")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("");
+                        Console.WriteLine("Solicitante adicionado com sucesso!");
+                        Console.WriteLine("");
+                        Console.ResetColor();
+                        Console.Write("Aperte ENTER para prosseguir.");
+                        Console.ReadLine();
+                        break;
+                    }
+                    else if (confirmarRegistro == "NAO")
+                    {
+                        opcaoValida = true;
+                        Console.WriteLine("");
+                        Console.Write("Aperte ENTER para realizar o registro do solicitante novamente.");
+                        Console.ReadLine();
+                        contadorTotal--;
+                        i--;
+                    }
+                    else
+                    {
+                        Console.WriteLine("");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Opcao invalida! Por favor, tente novamente com uma das opcoes validas!");
+                        Console.ResetColor();
+                        Console.WriteLine("");
+                        Console.WriteLine("Aperte ENTER para prosseguir.");
+                        Console.ReadLine();
+                        Console.WriteLine("Voce confirmar as informacoes digitadas? Digite 'Sim' ou 'Nao'.");
+                        Console.Write("Opcao escolhida: ");
+                        confirmarRegistro = Console.ReadLine();
+                        confirmarRegistro = confirmarRegistro.ToUpper();
+                    }
+                }
+            }
+
+            RetornarNomeSolicitante(nomeSolicitante);
+            RetornarEmailSolicitante(emailSolicitante);
+            RetornarTelefoneSolicitante(telefoneSolicitante);
+            totalDeSolicitantes = contador;
+            return totalDeSolicitantes;
+        }
+
+        static void MostrarSolicitantes(string[] nomeSolicitante, string[] emailSolicitante, string[] telefoneSolicitante, int totalDeSolicitantes)
+        {
+            Console.Clear();
+            Cabecalho();
+
+            Console.WriteLine("===== Cadastro de Solicitantes =====");
+            Console.WriteLine("");
+            Console.WriteLine("Total de solicitantes registradors: " + totalDeSolicitantes);
+            Console.WriteLine("");
+
+            if (totalDeSolicitantes == 0)
+            {
+                Console.WriteLine("Nao existem solicitantes cadastrados.");
+                Console.WriteLine("");
+                Console.Write("Aperte ENTER para prosseguir.");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.WriteLine("=============== Solicitantes ===============");
+            Console.WriteLine("");
+            Console.WriteLine("{0, -10} | {1, -35} | {2, -35} | {3, -15}", "ID", "Nome do Solicitante", "Email", "Telefone");
+            Console.WriteLine("---------------------------------------------------------------------------------------------------------------");
+
+            for (int i = 0; i < totalDeSolicitantes; i++)
+            {
+                Console.Write("{0, -10} | {1, -55} | {2, -35} | {3, -15}", i + 1, nomeSolicitante[i], emailSolicitante[i], telefoneSolicitante[i]);
+                Console.WriteLine("");
+            }
+            Console.WriteLine("");
+            Console.Write("Aperte ENTER para prosseguir.");
+            Console.ReadLine();
+        }
+
+        static void EditarSolicitantes(string[] nomeSolicitante, string[] emailSolicitante, string[] telefoneSolicitante, int totalDeSolicitantes)
+        {
+            if (totalDeSolicitantes == 0)
+            {
+                Console.WriteLine("");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ERRO!");
+                Console.WriteLine("Nao existem solicitantes registrados, registre pelo menos um solicitante!");
+                Console.ResetColor();
+                Console.WriteLine("");
+                Console.WriteLine("Aperte ENTER para prosseguir.");
+                Console.ReadLine();
+                return;
+            }
+
+            bool opcaoValida = false;
+            int solicitanteAEditar = 0;
+            while (opcaoValida == false)
+            {
+                MostrarSolicitantes(nomeSolicitante, emailSolicitante, telefoneSolicitante, totalDeSolicitantes);
+
+                Console.WriteLine("");
+                Console.WriteLine("Qual equipamento deseja editar?");
+                Console.Write("Numero do equipamento: ");
+                string inputSolicitante = Console.ReadLine();
+                int numeroSolicitante;
+                bool validaSolicitante = int.TryParse(inputSolicitante, out numeroSolicitante);
+                int contador = 0;
+
+                if (validaSolicitante == false)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Digito invalido! Por favor, digite um numero!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    for (int i = 1; i <= totalDeSolicitantes; i++)
+                    {
+                        if (numeroSolicitante == i)
+                        {
+                            solicitanteAEditar = i;
+                            opcaoValida = true;
+                            break;
+                        }
+                        else if (contador == totalDeSolicitantes - 1)
+                        {
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("ERRO!");
+                            Console.WriteLine("Solicitante nao encontrado! Digite um numero de solicitante valido.");
+                            Console.ResetColor();
+                            Console.WriteLine("");
+                            Console.WriteLine("Aperte ENTER para prosseguir.");
+                            Console.ReadLine();
+                        }
+                        contador++;
+                    }
+                }
+            }
+
+            Console.Clear();
+            Cabecalho();
+
+            solicitanteAEditar = solicitanteAEditar - 1;
+
+            Console.WriteLine("===== Solicitante {0} =====", solicitanteAEditar + 1);
+            Console.WriteLine("");
+            Console.WriteLine("Nome do Solicitante: " + nomeSolicitante[solicitanteAEditar]);
+            Console.WriteLine("");
+            Console.WriteLine("Email do Solicitante: " + emailSolicitante[solicitanteAEditar]);
+            Console.WriteLine("");
+            Console.WriteLine("Telefone do Solicitante " + telefoneSolicitante[solicitanteAEditar]);
+            Console.WriteLine("");
+
+            Console.WriteLine("O que deseja editar?");
+            Console.WriteLine("[1] - Nome.");
+            Console.WriteLine("[2] - Email.");
+            Console.WriteLine("[3] - Telefone.");
+            Console.WriteLine("");
+            Console.Write("Opcao escolhida: ");
+            string inputOpcaoEditar = Console.ReadLine();
+            Console.WriteLine("");
+            //fazer tratamento de erro depois se tiver tempo
+
+            int opcaoEditar = int.Parse(inputOpcaoEditar);
+
+            switch (opcaoEditar)
+            {
+                case 1:
+                    Console.WriteLine("Digite o novo nome para o equipamento.");
+                    Console.Write("Editar: ");
+                    nomeSolicitante[solicitanteAEditar] = Console.ReadLine();
+                    break;
+                case 2:
+                    Console.WriteLine("Digite o novo preco para o equipamento.");
+                    Console.Write("Editar: ");
+                    emailSolicitante[solicitanteAEditar] = Console.ReadLine();
+                    break;
+                case 3:
+                    Console.WriteLine("Digite o novo numero de telefone para o equipamento.");
+                    Console.Write("Editar: ");
+                    telefoneSolicitante[solicitanteAEditar] = Console.ReadLine();
+                    break;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("");
+            Console.WriteLine("Solicitante editado com sucesso!");
+            Console.WriteLine("");
+            Console.ResetColor();
+            Console.Write("Aperte ENTER para prosseguir.");
+            Console.ReadLine();
+
+            Console.Clear();
+            Cabecalho();
+
+            Console.WriteLine("===== Solicitante {0} apos edicao =====", solicitanteAEditar + 1);
+            Console.WriteLine("");
+            Console.WriteLine("Nome do Solicitante: " + nomeSolicitante[solicitanteAEditar]);
+            Console.WriteLine("");
+            Console.WriteLine("Email do Solicitante: " + emailSolicitante[solicitanteAEditar]);
+            Console.WriteLine("");
+            Console.WriteLine("Telefone do Solicitante " + telefoneSolicitante[solicitanteAEditar]);
+            Console.WriteLine("");
+
+            Console.ReadLine();
+        }
+
+        static int ExcluirSolicitantes(string[] nomeSolicitante, string[] emailSolicitante, string[] telefoneSolicitante, int totalDeSolicitantes)
+        {
+            bool opcaoValida = false;
+            int solicitanteAExcluir = 0;
+            string[] novaArrayNome = new string[1000];
+            string[] novaArrayEmail = new string[1000];
+            string[] novaArrayTelefone = new string[1000];
+            while (opcaoValida == false)
+            {
+                MostrarSolicitantes(nomeSolicitante, emailSolicitante, telefoneSolicitante, totalDeSolicitantes);
+
+                if (totalDeSolicitantes == 0)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Nao existem solicitantes registrados, registre pelo menos um solicitante!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                    return totalDeSolicitantes + 1;
+                }
+
+                Console.WriteLine("");
+                Console.WriteLine("Qual solicitante deseja excluir?");
+                Console.Write("Numero do solicitante: ");
+                string inputSolicitante = Console.ReadLine();
+                int numeroSolicitante;
+                bool validaSolicitante = int.TryParse(inputSolicitante, out numeroSolicitante);
+                int contador = 0;
+
+                if (validaSolicitante == false)
+                {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine("Digito invalido! Por favor, digite um numero!");
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                    Console.WriteLine("Aperte ENTER para prosseguir.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    for (int i = 1; i <= totalDeSolicitantes; i++)
+                    {
+                        if (numeroSolicitante == i)
+                        {
+                            solicitanteAExcluir = i;
+                            opcaoValida = true;
+                            break;
+                        }
+                        else if (contador == totalDeSolicitantes - 1)
+                        {
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("ERRO!");
+                            Console.WriteLine("Equipamento nao encontrado! Digite um numero de equipamento valido.");
+                            Console.ResetColor();
+                            Console.WriteLine("");
+                            Console.WriteLine("Aperte ENTER para prosseguir.");
+                            Console.ReadLine();
+                        }
+                        contador++;
+                    }
+                }
+            }
+
+            Console.Clear();
+            Cabecalho();
+
+            solicitanteAExcluir = solicitanteAExcluir - 1;
+
+            Console.WriteLine("===== Solicitante {0} =====", solicitanteAExcluir + 1);
+            Console.WriteLine("");
+            Console.WriteLine("Nome do Solicitante: " + nomeSolicitante[solicitanteAExcluir]);
+            Console.WriteLine("");
+            Console.WriteLine("Email do Solicitante: " + emailSolicitante[solicitanteAExcluir]);
+            Console.WriteLine("");
+            Console.WriteLine("Telefone do Solicitante " + telefoneSolicitante[solicitanteAExcluir]);
+            Console.WriteLine("");
+
+            Console.WriteLine("Tem certeza que deseja excluir essa equipamento? Digite 'Sim' ou 'Nao'.");
+            Console.Write("Opcao escolhida: ");
+            string confirmacaoExclusao = Console.ReadLine();
+            confirmacaoExclusao = confirmacaoExclusao.ToUpper();
+            int j = 0;
+
+            solicitanteAExcluir = solicitanteAExcluir + 1;
+
+            if (confirmacaoExclusao == "SIM")
+            {
+                for (int i = 0; i < totalDeSolicitantes; i++)
+                {
+                    if (i == solicitanteAExcluir - 1)
+                    {
+                        j++;
+                        novaArrayNome[i] = nomeSolicitante[j];
+                        novaArrayEmail[i] = emailSolicitante[j];
+                        novaArrayTelefone[i] = telefoneSolicitante[j];
+                        j++;
+                        continue;
+                    }
+                    else
+                    {
+                        novaArrayNome[i] = nomeSolicitante[j];
+                        novaArrayEmail[i] = emailSolicitante[j];
+                        novaArrayTelefone[i] = telefoneSolicitante[j];
+                        j++;
+                    }
+                }
+
+                for (int i = 0; i < 1000; i++)
+                {
+                    nomeSolicitante[i] = novaArrayNome[i];
+                    emailSolicitante[i] = novaArrayEmail[i];
+                    telefoneSolicitante[i] = novaArrayTelefone[i];
+                }
+
+                totalDeSolicitantes = totalDeSolicitantes - 1;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("");
+                Console.WriteLine("Equipamento excluido com sucesso!");
+                Console.WriteLine("");
+                Console.ResetColor();
+                Console.Write("Aperte ENTER para prosseguir.");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("Retorne ao menu e tente novamente.");
+                Console.WriteLine("");
+                Console.Write("Aperte ENTER para prosseguir.");
+                Console.ReadLine();
+                return totalDeSolicitantes + 1;
+            }
+
+            return totalDeSolicitantes + 1;
+        }
     }
+    #endregion
 }
 
